@@ -37,6 +37,11 @@ nvm_version()
         (cd $NVM_DIR; (\ls -dG v*) 2>/dev/null || echo "N/A")
         return
     fi
+    if [ "$PATTERN" = 'remote' ]; then
+      if [ "`curl -Is "http://nodejs.org/dist/" | grep '200 OK'`" = '' ] && echo "nvm: get remote list failed." && return
+        curl -s http://nodejs.org/dist/ | egrep -o 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -u -t. -k 1.2,1n -k 2,2n -k 3,3n
+        return
+    fi
     if [ ! "$VERSION" ]; then
         VERSION=`(cd $NVM_DIR; (\ls -d v${PATTERN}*) 2>/dev/null) | sort -t. -k 2,1n -k 2,2n -k 3,3n | tail -n1`
     fi
@@ -70,7 +75,7 @@ nvm()
       echo "    nvm run <version> [<args>]  Run <version> with <args> as arguments"
       echo "    nvm ls                      List installed versions"
       echo "    nvm ls <version>            List versions matching a given description"
-      echo "    nvm ls known                List versions what can be installed by nvm"
+      echo "    nvm ls remote               List versions what can be installed by nvm"
       echo "    nvm deactivate              Undo effects of NVM on current shell"
       echo "    nvm alias [<pattern>]       Show all aliases beginning with <pattern>"
       echo "    nvm alias <name> <version>  Set an alias named <name> pointing to <version>"
@@ -223,9 +228,7 @@ nvm()
     ;;
     "ls" | "list" )
       if [[ "$2" == "known" ]]; then
-          curl -Is http://nodejs.org/dist/ > /dev/null
-          [ $? -ne 0 ] && echo "nvm: list failed." && return
-          curl -s http://nodejs.org/dist/ | egrep -o 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -u -t. -k 1.2,1n -k 2,2n -k 3,3n
+          echo "please use 'nvm ls remote'"
           return
       fi
       if [ $# -ne 1 ]; then
