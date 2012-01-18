@@ -223,7 +223,7 @@ nvm()
     ;;
     "ls" | "list" )
       if [[ "$2" == "known" ]]; then
-          curl -Is http://nodejs.org/dist/
+          curl -Is http://nodejs.org/dist/ > /dev/null
           [ $? -ne 0 ] && echo "nvm: list failed." && return
           curl -s http://nodejs.org/dist/ | egrep -o 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -u -t. -k 1.2,1n -k 2,2n -k 3,3n
           return
