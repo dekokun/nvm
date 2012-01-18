@@ -96,7 +96,7 @@ nvm()
       fi
       [ "$NOCURL" ] && curl && return
       if [ "$2" = "latest" ]; then
-        VERSION=`curl -s http://nodejs.org/dist/ | egrep -o 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -t. -k 1.2,1n -k 2,2n -k 3,3n  | tail -n1`
+        VERSION=`nvm ls remote | tail -n1`
         [ -z $VERSION ] && echo "nvm: install failed." && return
         echo "latest is $VERSION"
       else
