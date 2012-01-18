@@ -40,6 +40,9 @@ nvm_version()
     if [ ! "$VERSION" ]; then
         VERSION=`(cd $NVM_DIR; (\ls -d v${PATTERN}*) 2>/dev/null) | sort -t. -k 2,1n -k 2,2n -k 3,3n | tail -n1`
     fi
+    if [[ "$PATTERN" == "latest" ]]; then
+        VERSION=`curl -s http://nodejs.org/dist/ | egrep -o 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -u -k 1,1n -k 2,2n -k 3,3n -t . | tail -n1`
+    fi
     if [ ! "$VERSION" ]; then
         echo "N/A"
         return 13
