@@ -19,8 +19,8 @@ fi
 # Expand a version using the version cache
 nvm_version()
 {
-    PATTERN=$1
-    VERSION=''
+    local PATTERN=$1
+    local VERSION=''
     if [ -f "$NVM_DIR/alias/$PATTERN" ]; then
         nvm_version `cat $NVM_DIR/alias/$PATTERN`
         return
@@ -96,16 +96,16 @@ nvm()
       fi
       [ "$NOCURL" ] && curl && return
       if [ "$2" = "latest" ]; then
-        VERSION=`nvm ls remote | tail -n1`
+        local VERSION=`nvm ls remote | tail -n1`
         [ -z $VERSION ] && echo "nvm: install failed." && return
         echo "latest is $VERSION"
       else
-        VERSION=`nvm_version $2`
+        local VERSION=`nvm_version $2`
       fi
 
       [ -d "$NVM_DIR/$VERSION" ] && echo "$VERSION is already installed." && return
 
-      tarball=''
+      local tarball=''
       if [ "`curl -Is "http://nodejs.org/dist/$VERSION/node-$VERSION.tar.gz" | grep '200 OK'`" != '' ]; then
         tarball="http://nodejs.org/dist/$VERSION/node-$VERSION.tar.gz"
       elif [ "`curl -Is "http://nodejs.org/dist/node-$VERSION.tar.gz" | grep '200 OK'`" != '' ]; then
@@ -149,7 +149,7 @@ nvm()
         echo "nvm: Cannot uninstall currently-active node version, $2."
         return
       fi
-      VERSION=`nvm_version $2`
+      local VERSION=`nvm_version $2`
       if [ ! -d $NVM_DIR/$VERSION ]; then
         echo "$VERSION version is not installed yet"
         return;
@@ -190,7 +190,7 @@ nvm()
         nvm help
         return
       fi
-      VERSION=`nvm_version $2`
+      local VERSION=`nvm_version $2`
       if [ ! -d $NVM_DIR/$VERSION ]; then
         echo "$VERSION version is not installed yet"
         return;
@@ -218,7 +218,7 @@ nvm()
         nvm help
         return
       fi
-      VERSION=`nvm_version $2`
+      local VERSION=`nvm_version $2`
       if [ ! -d $NVM_DIR/$VERSION ]; then
         echo "$VERSION version is not installed yet"
         return;
@@ -244,7 +244,7 @@ nvm()
       if [ $# -le 2 ]; then
           (cd $NVM_DIR/alias && for ALIAS in `(\ls $2*) 2>/dev/null`; do
             DEST=`cat $ALIAS`
-            VERSION=`nvm_version $DEST`
+            local VERSION=`nvm_version $DEST`
             if [ "$DEST" = "$VERSION" ]; then
                 echo "$ALIAS -> $DEST"
             else
@@ -259,7 +259,7 @@ nvm()
           return
       fi
       mkdir -p $NVM_DIR/alias
-      VERSION=`nvm_version $3`
+      local VERSION=`nvm_version $3`
       if [ $? -ne 0 ]; then
         echo "! WARNING: Version '$3' does not exist." >&2
       fi
@@ -282,9 +282,9 @@ nvm()
           nvm help
           return
         fi
-        VERSION=`nvm_version $2`
-        ROOT=`nvm use $VERSION && npm -g root`
-        INSTALLS=`nvm use $VERSION > /dev/null && npm -g -p ll | grep "$ROOT\/[^/]\+$" | cut -d '/' -f 8 | cut -d ":" -f 2 | grep -v npm | tr "\n" " "`
+        local VERSION=`nvm_version $2`
+        local ROOT=`nvm use $VERSION && npm -g root`
+        local INSTALLS=`nvm use $VERSION > /dev/null && npm -g -p ll | grep "$ROOT\/[^/]\+$" | cut -d '/' -f 8 | cut -d ":" -f 2 | grep -v npm | tr "\n" " "`
         npm install -g $INSTALLS
     ;;
     "clear-cache" )
