@@ -19,6 +19,14 @@ Often I also put in a line to use a specific version of node.
     
 ## Usage
 
+To download, compile, and install the latest release of node, do this:
+
+    nvm install latest
+
+If you want to see what versions you can install:
+
+    nvm ls remote
+
 To download, compile, and install the v0.4.1 release of node, do this:
 
     nvm install v0.4.1
